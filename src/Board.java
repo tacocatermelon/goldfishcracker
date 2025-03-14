@@ -1,9 +1,17 @@
+import java.util.Arrays;
+
 public class Board {
 
-    static Space[][] board;
+    private static Space[][] board;
+    private static Player player;
+    private static Enemy enemy;
+    static int[] playerPos;
+    static int[] enemyPos;
 
-    public Board(int xSize, int ySize){
+    public Board(int xSize, int ySize, Player player, Enemy enemy){
         board = new Space[xSize][ySize];
+        Board.player = player;
+        Board.enemy = enemy;
     }
 
     public static int[] getBoardSize(){
@@ -13,12 +21,10 @@ public class Board {
     public void createBoard(){
         int row = (int)(Math.random()*board.length);
         int col = (int)(Math.random()*board[0].length);
-        board[row][col] = new Player('✭',Util.xToCoords(row),Util.yToCoords(col));
-        while(board[row][col]!=null&&board[row][col].getClass()==Player.class){
-            row = (int)(Math.random()*board.length);
-            col = (int)(Math.random()*board[0].length);
-        }
-        board[row][col] = new Enemy('✧',Util.xToCoords(row),Util.yToCoords(col));
+        playerPos = Util.toCoords(new int[]{row,col});
+        player.setPos(playerPos);
+        int[] playerIdxs = Util.toIdx(playerPos);
+        board[playerIdxs[0]][playerIdxs[1]] = player;
         for (int i = 0; i < board.length; i++) {
             for (int j = 0; j < board[0].length; j++) {
                 if(board[i][j]==null){
@@ -26,6 +32,15 @@ public class Board {
                 }
             }
         }
+        enemyPos = Util.toCoords(new int[]{row,col});
+        while(Arrays.equals(enemyPos, playerPos)){
+            row = (int)(Math.random()*board.length);
+            col = (int)(Math.random()*board[0].length);
+            enemyPos = Util.toCoords(new int[]{row,col});
+        }
+        enemy.setPos(enemyPos);
+        int[] enemyIdxs = Util.toIdx(enemyPos);
+        board[enemyIdxs[0]][enemyIdxs[1]] = enemy;
     }
 
     public void printBoard(){
@@ -35,5 +50,13 @@ public class Board {
             }
             System.out.println();
         }
+    }
+
+    public static void newPos(int[] newPos){
+        int[] playerIdxs = Util.toIdx(playerPos);
+        board[playerIdxs[0]][playerIdxs[1]] = new Space('_');
+        playerPos = newPos;
+        playerIdxs = Util.toIdx(playerPos);
+        board[playerIdxs[0]][playerIdxs[1]] = player;
     }
 }
