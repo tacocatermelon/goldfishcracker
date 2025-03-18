@@ -16,6 +16,7 @@ public class DisplayPanel extends JPanel implements ActionListener, KeyListener{
     private JButton s;
     private JButton d;
     private JTextField textField;
+    private static String inputPrompt = "";
 
     public DisplayPanel() {
         setBackground(new Color(149,185,219));
@@ -43,6 +44,14 @@ public class DisplayPanel extends JPanel implements ActionListener, KeyListener{
         add(textField);
     }
 
+    public static String getInputPrompt() {
+        return inputPrompt;
+    }
+
+    public static void setInputPrompt(String inputPrompt) {
+        DisplayPanel.inputPrompt = inputPrompt;
+    }
+
     @Override
     public void paintComponent(Graphics g) {
         super.paintComponent(g);
@@ -51,15 +60,18 @@ public class DisplayPanel extends JPanel implements ActionListener, KeyListener{
         if(Ui.isBoardMade()) {
             String[] board = Board.boardToStrings();
             int newLine = g.getFont().getSize() + 5;
+            g.setFont(new Font("Arial", Font.BOLD, 20));
             for (int i = 0; i < board.length; i++) {
-                g.drawString(board[i].substring(4), 100, 50+(newLine*i));
+                Util.drawCentered(g,board[i].substring(4),800,0,50+(newLine*i));
             }
+            g.setFont(new Font("Arial", Font.BOLD, 16));
         }
-        w.setLocation(350, 575);
-        a.setLocation(300, 600);
-        s.setLocation(350, 625);
-        d.setLocation(400, 600);
-        textField.setLocation(325, 550);
+        Util.drawCentered(g,inputPrompt,800,0,545);
+        w.setLocation(Util.centeredX(w,800,0), 575);
+        a.setLocation(Util.centeredX(w,800,0)-50, 600);
+        s.setLocation(Util.centeredX(w,800,0), 625);
+        d.setLocation(Util.centeredX(w,800,0)+50, 600);
+        textField.setLocation(Util.centeredX(textField,800,0), 550);
     }
 
     public void actionPerformed(ActionEvent e) {
