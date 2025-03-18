@@ -68,6 +68,8 @@ public class Board {
         playerPos = newPos;
         playerIdxs = Util.toIdx(playerPos);
         board[playerIdxs[0]][playerIdxs[1]] = player;
-
+        if((!(board[Util.toIdx(enemyPos)[0]][Util.toIdx(enemyPos)[1]] instanceof Enemy))&&(!(board[Util.toIdx(enemyPos)[0]][Util.toIdx(enemyPos)[1]] instanceof Player))){
+            board[Util.toIdx(enemyPos)[0]][Util.toIdx(enemyPos)[1]] = enemy;
+        }
     }
 }
