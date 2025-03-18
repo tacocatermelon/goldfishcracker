@@ -43,7 +43,7 @@ public class Board {
         board[enemyIdxs[0]][enemyIdxs[1]] = enemy;
     }
 
-    public void printBoard(){
+    public void printBoard() {
         for (int i = 0; i < board.length; i++) {
             for (int j = 0; j < board[0].length; j++) {
                 System.out.print(board[i][j].getSymb());
@@ -52,11 +52,22 @@ public class Board {
         }
     }
 
+    public static String[] boardToStrings(){
+        String[] out = new String[board.length];
+        for (int i = 0; i < board.length; i++) {
+            for (int j = 0; j < board[0].length; j++) {
+                out[i] += board[i][j].getSymb()+" ";
+            }
+        }
+        return out;
+    }
+
     public static void newPos(int[] newPos){
         int[] playerIdxs = Util.toIdx(playerPos);
         board[playerIdxs[0]][playerIdxs[1]] = new Space('_');
         playerPos = newPos;
         playerIdxs = Util.toIdx(playerPos);
         board[playerIdxs[0]][playerIdxs[1]] = player;
+
     }
 }

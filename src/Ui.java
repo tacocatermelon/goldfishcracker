@@ -2,11 +2,18 @@ import java.util.Scanner;
 
 public class Ui {
 
-    private static final Player player = new Player('✭',5,5);
+    private static Player player;
     private static final Enemy enemy = new Enemy('✧',0,0);
     private static Scanner scan = new Scanner(System.in);
+    private static boolean boardMade = false;
+
+    public static boolean isBoardMade() {
+        return boardMade;
+    }
 
     public static void play(){
+        Frame frame = new Frame();
+        player = new Player('✭',5,5,frame);
         System.out.print("How wide would you like the board to be? (min 8): ");
         int temp = scan.nextInt();
         while (temp<8){
@@ -21,6 +28,8 @@ public class Ui {
         }
         Board board = new Board(temp2,temp,player,enemy);
         board.createBoard();
+        boardMade = true;
+        frame.getPanel().update();
         while(player.getHp()>0){
             board.printBoard();
             scan.nextLine();
