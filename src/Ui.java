@@ -11,6 +11,10 @@ public class Ui {
         return boardMade;
     }
 
+    public static Player getPlayer() {
+        return player;
+    }
+
     public static void play(){
         Frame frame = new Frame();
         player = new Player('✭',5,5,frame);

@@ -78,35 +78,33 @@ public class DisplayPanel extends JPanel implements ActionListener, KeyListener{
         if (e.getSource() instanceof JButton) {
             JButton casted = (JButton) e.getSource();
             if (casted == w) {
-
+                Ui.getPlayer().move("w",1);
             }else if(casted==a){
-
+                Ui.getPlayer().move("a",1);
             }else if(casted==s){
-
+                Ui.getPlayer().move("s",1);
             }else if(casted==d){
-
+                Ui.getPlayer().move("d",1);
             }
+            refocus();
         }
     }
 
-    // these methods are "required" by the KeyListener interface
     @Override
     public void keyTyped(KeyEvent e) {}
 
-    // this method is called by the system automatically whenever the user
-    // presses ANY key on the keyboard
     @Override
     public void keyPressed(KeyEvent e) {
         // A = 65, D = 68, S = 83, W = 87, left = 37, up = 38, right = 39, down = 40, space = 32, enter = 10
         int key = e.getKeyCode();
         if (key == 38||key == 87) {  // up key/W
-
+            Ui.getPlayer().move("w",1);
         } else if (key == 40||key == 83) { // down key/S
-
-        } else if (key == 37||key == 65) { // left key
-
-        } else if (key == 39||key == 68) {  // right key
-
+            Ui.getPlayer().move("s",1);
+        } else if (key == 37||key == 65) { // left key/A
+            Ui.getPlayer().move("a",1);
+        } else if (key == 39||key == 68) {  // right key/D
+            Ui.getPlayer().move("d",1);
         }else if(key==10){
             String enteredText = textField.getText();
             repaint();
@@ -118,5 +116,9 @@ public class DisplayPanel extends JPanel implements ActionListener, KeyListener{
 
     public void update(){
         repaint();
+    }
+
+    private void refocus(){
+        requestFocusInWindow();
     }
 }
