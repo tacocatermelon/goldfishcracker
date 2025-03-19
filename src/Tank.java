@@ -4,12 +4,14 @@ public class Tank extends Space{
     int yPos;
     int hp;
     double score; //score based on distance of shot
+    Frame frame;
 
-    public Tank(char symb, int xPos, int yPos) {
+    public Tank(char symb, int xPos, int yPos, Frame frame) {
         super(symb);
         this.xPos = xPos;
         this.yPos = yPos;
         hp = 5;
+        this.frame = frame;
     }
 
     public int getxPos() {

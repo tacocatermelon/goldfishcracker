@@ -72,4 +72,15 @@ public class Board {
             board[Util.toIdx(enemyPos)[0]][Util.toIdx(enemyPos)[1]] = enemy;
         }
     }
+
+    public static void newEnemyPos(int[] newPos){
+        int[] enemyIdxs = Util.toIdx(enemyPos);
+        board[enemyIdxs[0]][enemyIdxs[1]] = new Space('_');
+        enemyPos = newPos;
+        enemyIdxs = Util.toIdx(enemyPos);
+        board[enemyIdxs[0]][enemyIdxs[1]] = enemy;
+        if((!(board[Util.toIdx(playerPos)[0]][Util.toIdx(playerPos)[1]] instanceof Player))&&(!(board[Util.toIdx(playerPos)[0]][Util.toIdx(playerPos)[1]] instanceof Enemy))){
+            board[Util.toIdx(playerPos)[0]][Util.toIdx(playerPos)[1]] = player;
+        }
+    }
 }

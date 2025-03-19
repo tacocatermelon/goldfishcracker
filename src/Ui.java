@@ -3,7 +3,7 @@ import java.util.Scanner;
 public class Ui {
 
     private static Player player;
-    private static final Enemy enemy = new Enemy('✧',0,0);
+    private static Enemy enemy;
     private static Scanner scan = new Scanner(System.in);
     private static boolean boardMade = false;
 
@@ -18,6 +18,7 @@ public class Ui {
     public static void play(){
         Frame frame = new Frame();
         player = new Player('✭',5,5,frame);
+        enemy = new Enemy('✧',0,0, frame);
         String tempstr = DisplayPanel.promptString("How wide would you like the board to be? (min 8)", frame.getPanel());
         int temp = Integer.parseInt(tempstr);
         while (temp<8){
@@ -34,9 +35,20 @@ public class Ui {
         board.createBoard();
         boardMade = true;
         frame.getPanel().update();
+        while (player.getHp()>0){
+            while (player.getMoveCount()<=3){
+                try {
+                    Thread.sleep(100);
+                } catch (InterruptedException e) {
+                    Thread.currentThread().interrupt();
+                }
+            }
+            enemy.takeTurn();
+            player.setMoveCount(0);
+        }
     }
 
-    public static void invalidMove(){
+    /*public static void invalidMove(){
         scan.nextLine();
         System.out.print("Enter a direction (WASD): ");
         String choice = scan.nextLine().toLowerCase();
@@ -51,5 +63,5 @@ public class Ui {
             move = scan.nextInt();
         }
         player.move(choice,move);
-    }
+    }*/
 }
