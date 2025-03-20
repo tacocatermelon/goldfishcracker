@@ -6,9 +6,14 @@ public class Ui {
     private static Enemy enemy;
     private static Scanner scan = new Scanner(System.in);
     private static boolean boardMade = false;
+    private static boolean shooting = false;
 
     public static boolean isBoardMade() {
         return boardMade;
+    }
+
+    public static boolean isShooting() {
+        return shooting;
     }
 
     public static Player getPlayer() {
@@ -43,8 +48,21 @@ public class Ui {
                     Thread.currentThread().interrupt();
                 }
             }
-            enemy.takeTurn();
+            shooting = true;
+            String tempstr3 = DisplayPanel.promptString("What shot power would you like?", frame.getPanel());
+            double power = Double.parseDouble(tempstr3);
+            String tempstr4 = DisplayPanel.promptString("What shot angle would you like?", frame.getPanel());
+            double angle = Double.parseDouble(tempstr4);
+            if(player.fire(power, angle)){
+                enemy.setHp(enemy.getHp()-1);
+                enemy.movementTurn();
+                double tempscore = player.getScored()*Math.pow(10,2); //rounding to 2 decimal places
+                tempscore = Math.round(tempscore);
+                DisplayPanel.setOutputText("Hit!!   +"+tempscore*Math.pow(10,2));
+            }
+            enemy.movementTurn();
             player.setMoveCount(0);
+            shooting = false;
         }
     }
 

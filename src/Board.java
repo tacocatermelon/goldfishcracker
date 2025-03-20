@@ -18,6 +18,14 @@ public class Board {
         return new int[]{board.length,board[0].length};
     }
 
+    public static int[] getPlayerPos() {
+        return playerPos;
+    }
+
+    public static int[] getEnemyPos() {
+        return enemyPos;
+    }
+
     public void createBoard(){
         int row = (int)(Math.random()*board.length);
         int col = (int)(Math.random()*board[0].length);
@@ -43,14 +51,14 @@ public class Board {
         board[enemyIdxs[0]][enemyIdxs[1]] = enemy;
     }
 
-    public void printBoard() {
+    /*public void printBoard() {
         for (int i = 0; i < board.length; i++) {
             for (int j = 0; j < board[0].length; j++) {
                 System.out.print(board[i][j].getSymb());
             }
             System.out.println();
         }
-    }
+    }*/
 
     public static String[] boardToStrings(){
         String[] out = new String[board.length];

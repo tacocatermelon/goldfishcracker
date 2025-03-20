@@ -3,7 +3,7 @@ public class Enemy extends Tank{
         super(symb, xPos, yPos, frame);
     }
 
-    public void takeTurn(){
+    public void movementTurn(){
         double rand;
         for (int i = 0; i < 2; i++) {
             rand = Math.random();

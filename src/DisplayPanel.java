@@ -19,6 +19,7 @@ public class DisplayPanel extends JPanel implements ActionListener, KeyListener{
     private JTextField textField;
     private static String inputPrompt = "";
     private static String enteredText = "";
+    private static String outputText = "";
 
     public DisplayPanel() {
         setBackground(new Color(149,185,219));
@@ -70,6 +71,14 @@ public class DisplayPanel extends JPanel implements ActionListener, KeyListener{
         return inputPrompt;
     }
 
+    public static String getOutputText() {
+        return outputText;
+    }
+
+    public static void setOutputText(String outputText) {
+        DisplayPanel.outputText = outputText;
+    }
+
     public static String promptString(String inputPrompt, DisplayPanel panel) {
         enteredText = "";
         DisplayPanel.inputPrompt = inputPrompt;
@@ -112,16 +121,18 @@ public class DisplayPanel extends JPanel implements ActionListener, KeyListener{
 
     public void actionPerformed(ActionEvent e) {
         if (e.getSource() instanceof JButton casted) {
-            if (casted == w) {
-                Ui.getPlayer().move("w",1);
-            }else if(casted==a){
-                Ui.getPlayer().move("a",1);
-            }else if(casted==s){
-                Ui.getPlayer().move("s",1);
-            }else if(casted==d){
-                Ui.getPlayer().move("d",1);
+            if(!Ui.isShooting()){
+                if (casted == w) {
+                    Ui.getPlayer().move("w",1);
+                }else if(casted==a){
+                    Ui.getPlayer().move("a",1);
+                }else if(casted==s){
+                    Ui.getPlayer().move("s",1);
+                }else if(casted==d){
+                    Ui.getPlayer().move("d",1);
+                }
+                refocus();
             }
-            refocus();
         }
     }
 
@@ -135,14 +146,16 @@ public class DisplayPanel extends JPanel implements ActionListener, KeyListener{
     public void keyReleased(KeyEvent e) {
         // A = 65, D = 68, S = 83, W = 87, left = 37, up = 38, right = 39, down = 40, space = 32, enter = 10
         int key = e.getKeyCode();
-        if (key == 38||key == 87) {  // up key/W
-            Ui.getPlayer().move("w",1);
-        } else if (key == 40||key == 83) { // down key/S
-            Ui.getPlayer().move("s",1);
-        } else if (key == 37||key == 65) { // left key/A
-            Ui.getPlayer().move("a",1);
-        } else if (key == 39||key == 68) {  // right key/D
-            Ui.getPlayer().move("d",1);
+        if(!Ui.isShooting()) {
+            if (key == 38 || key == 87) {  // up key/W
+                Ui.getPlayer().move("w", 1);
+            } else if (key == 40 || key == 83) { // down key/S
+                Ui.getPlayer().move("s", 1);
+            } else if (key == 37 || key == 65) { // left key/A
+                Ui.getPlayer().move("a", 1);
+            } else if (key == 39 || key == 68) {  // right key/D
+                Ui.getPlayer().move("d", 1);
+            }
         }
     }
 

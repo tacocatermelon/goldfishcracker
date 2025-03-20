@@ -3,7 +3,6 @@ public class Tank extends Space{
     int xPos;
     int yPos;
     int hp;
-    double score; //score based on distance of shot
     Frame frame;
 
     public Tank(char symb, int xPos, int yPos, Frame frame) {
@@ -30,10 +29,6 @@ public class Tank extends Space{
         return new int[]{xPos,yPos};
     }
 
-    public double getScore() {
-        return score;
-    }
-
     public void setxPos(int xPos) {
         this.xPos = xPos;
     }
@@ -49,9 +44,5 @@ public class Tank extends Space{
 
     public void setHp(int hp) {
         this.hp = hp;
-    }
-
-    public void setScore(double score) {
-        this.score = score;
     }
 }

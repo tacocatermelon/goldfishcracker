@@ -3,7 +3,7 @@ import java.awt.*;
 
 public class Util {
 
-    private Util(){};
+    private Util(){}
 
     public static int[] toIdx(int[] coords){
         return new int[]{Board.getBoardSize()[0]-coords[1],coords[0]-1};
@@ -27,6 +27,10 @@ public class Util {
     public static int centeredX(JButton a, int width, int xPos){
         int size = a.getWidth();
         return (width/2 - size/2)+xPos;
+    }
+
+    public static double toRadians(double degrees){
+        return (Math.PI/180)*degrees;
     }
 
 }
