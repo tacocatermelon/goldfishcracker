@@ -1,3 +1,5 @@
+import java.util.Arrays;
+
 public class Enemy extends Tank{
     public Enemy(char symb, int xPos, int yPos, Frame frame) {
         super(symb, xPos, yPos, frame);
@@ -33,4 +35,28 @@ public class Enemy extends Tank{
         Board.newEnemyPos(getPos());
         frame.getPanel().repaint();
     }
+
+    /*public boolean combatTurn(){
+            if() {
+
+            }else if() {
+
+            }else if() {
+
+            }else {
+
+            }
+            double cos = Math.cos(angle);
+            double sin = Math.sin(angle);
+            double x1 = power*cos+getxPos();
+            double y1 = power*sin+getyPos();
+            int[] shotPos = new int[]{(int)Math.round(x1),(int)Math.round(y1)};
+            if(Arrays.equals(shotPos, Board.getPlayerPos())){
+                return true;
+            }else{
+                return false;
+            }
+        }
+    }*/
+
 }

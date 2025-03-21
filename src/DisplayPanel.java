@@ -102,6 +102,7 @@ public class DisplayPanel extends JPanel implements ActionListener, KeyListener{
         for (JButton jButton : Arrays.asList(w, a, s, d)) {
             jButton.setVisible(Ui.isBoardMade());
         }
+
         if(Ui.isBoardMade()) {
             String[] board = Board.boardToStrings();
             int newLine = g.getFont().getSize() + 5;
@@ -113,18 +114,22 @@ public class DisplayPanel extends JPanel implements ActionListener, KeyListener{
             g.setFont(new Font("Arial", Font.BOLD, 16));
             g.setColor(Color.BLUE);
         }
+
         w.setLocation(Util.centeredX(w,800,0), 575);
         a.setLocation(Util.centeredX(w,800,0)-50, 600);
         s.setLocation(Util.centeredX(w,800,0), 625);
         d.setLocation(Util.centeredX(w,800,0)+50, 600);
+
         if(Ui.isBoardMade()){
             Util.drawCentered(g,inputPrompt,800,0,545);
         }else{
             Util.drawCentered(g,inputPrompt,800,0,625);
         }
+
         if(!inputPrompt.isEmpty()){
             outputText = "";
         }
+
         if(Ui.isBoardMade()) {
             g.setColor(new Color(9, 161, 15));
             Util.drawCentered(g, outputText, 800, 0, 525);
@@ -137,6 +142,7 @@ public class DisplayPanel extends JPanel implements ActionListener, KeyListener{
             Util.drawCentered(g,"Score: " + Ui.playerScore(),300,500,615);
             g.setFont(new Font("Arial", Font.BOLD, 16));
         }
+
         if(Ui.isBoardMade()) {
             textField.setLocation(Util.centeredX(textField, 800, 0), 550);
         }else{

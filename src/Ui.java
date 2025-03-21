@@ -24,6 +24,7 @@ public class Ui {
         Frame frame = new Frame();
         player = new Player('✭',5,5,frame);
         enemy = new Enemy('✧',0,0, frame);
+
         String tempstr = DisplayPanel.promptString("How wide would you like the board to be? (min 8)", frame.getPanel());
         int temp = Integer.parseInt(tempstr);
         while (temp<8){
@@ -40,6 +41,7 @@ public class Ui {
         board.createBoard();
         boardMade = true;
         frame.getPanel().update();
+
         while (player.getHp()>0){
             while (player.getMoveCount()<=3){
                 try {
@@ -48,19 +50,22 @@ public class Ui {
                     Thread.currentThread().interrupt();
                 }
             }
+
             shooting = true;
             String tempstr3 = DisplayPanel.promptString("What shot power would you like?", frame.getPanel());
             double power = Double.parseDouble(tempstr3);
             String tempstr4 = DisplayPanel.promptString("What shot angle would you like?", frame.getPanel());
             double angle = Double.parseDouble(tempstr4);
+
             if(player.fire(power, angle)){
                 enemy.setHp(enemy.getHp()-1);
                 enemy.movementTurn();
                 double tempscore = player.getScored()*Math.pow(10,2); //rounding to 2 decimal places
                 tempscore = Math.round(tempscore);
-                DisplayPanel.setOutputText("Hit!!   +"+tempscore*Math.pow(10,2));
+                DisplayPanel.setOutputText("Hit!!   +"+tempscore*Math.pow(10,-2));
                 frame.getPanel().update();
             }
+
             enemy.movementTurn();
             player.setMoveCount(0);
             shooting = false;

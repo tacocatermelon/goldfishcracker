@@ -43,7 +43,9 @@ public class Player extends Tank{
         }else if(direction.equals("a")){
             setxPos(getxPos()-dist);
         }
+
         int[] posIdxs = Util.toIdx(getPos());
+
         if(!(posIdxs[1]>=Board.getBoardSize()[1]||posIdxs[0]>=Board.getBoardSize()[0]||posIdxs[0]<0||posIdxs[1]<0)){ //in bounds check
             moveCount++;
             Board.newPos(getPos());
@@ -61,13 +63,28 @@ public class Player extends Tank{
         double sin = Math.sin(angle);
         double x1 = power*cos+getxPos();
         double y1 = power*sin+getyPos();
-        int[] shotPos = new int[]{(int)Math.round(x1),(int)Math.round(y1)};
-        if(Arrays.equals(shotPos, Board.getEnemyPos())){
-            scored = Math.sqrt(Math.pow(x1-getxPos(),2)+Math.pow(y1-getyPos(),2)); //distance from tank to point
-            score += scored;
-            return true;
-        }else{
-            return false;
+        int[][] shots = new int[(int)power+1][2];
+        double[] xs = new double[(int)power+1];
+        double[] ys = new double[(int)power+1];
+        shots[shots.length-1] = new int[]{(int)Math.round(x1),(int)Math.round(y1)};
+        xs[shots.length-1] = x1;
+        ys[shots.length-1] = y1;
+
+        for (int i = 0; i < shots.length-1; i++) {
+            x1 = i*cos+getxPos();
+            y1 = i*sin+getyPos();
+            shots[i] = new int[]{(int)Math.round(x1),(int)Math.round(y1)};
+            xs[i] = x1;
+            ys[i] = y1;
         }
+
+        for (int i = 0; i < shots.length; i++) {
+            if(Arrays.equals(shots[i], Board.getEnemyPos())){
+                scored = 100*(Math.sqrt(Math.pow(xs[i]-getxPos(),2)+Math.pow(ys[i]-getyPos(),2))); //distance from tank to point
+                score += scored;
+                return true;
+            }
+        }
+        return false;
     }
 }
