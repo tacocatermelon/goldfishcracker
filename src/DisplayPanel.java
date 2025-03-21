@@ -106,17 +106,42 @@ public class DisplayPanel extends JPanel implements ActionListener, KeyListener{
             String[] board = Board.boardToStrings();
             int newLine = g.getFont().getSize() + 5;
             g.setFont(new Font("Arial", Font.BOLD, 20));
+            g.setColor(new Color(88, 40, 103));
             for (int i = 0; i < board.length; i++) {
                 Util.drawCentered(g,board[i].substring(4),800,0,50+(newLine*i));
             }
             g.setFont(new Font("Arial", Font.BOLD, 16));
+            g.setColor(Color.BLUE);
         }
         w.setLocation(Util.centeredX(w,800,0), 575);
         a.setLocation(Util.centeredX(w,800,0)-50, 600);
         s.setLocation(Util.centeredX(w,800,0), 625);
         d.setLocation(Util.centeredX(w,800,0)+50, 600);
-        Util.drawCentered(g,inputPrompt,800,0,545);
-        textField.setLocation(Util.centeredX(textField,800,0), 550);
+        if(Ui.isBoardMade()){
+            Util.drawCentered(g,inputPrompt,800,0,545);
+        }else{
+            Util.drawCentered(g,inputPrompt,800,0,625);
+        }
+        if(!inputPrompt.isEmpty()){
+            outputText = "";
+        }
+        if(Ui.isBoardMade()) {
+            g.setColor(new Color(9, 161, 15));
+            Util.drawCentered(g, outputText, 800, 0, 525);
+            g.setColor(new Color(129, 31, 31));
+            g.setFont(new Font("Arial", Font.BOLD, 22));
+            Util.drawCentered(g, "Enemy Health: " + Ui.enemyHp(), 300, 0, 600);
+            g.setColor(new Color(37, 66, 129));
+            Util.drawCentered(g, "Player Health: " + Ui.playerHp(), 300, 0, 625);
+            g.setColor(new Color(8, 161, 14));
+            Util.drawCentered(g,"Score: " + Ui.playerScore(),300,500,615);
+            g.setFont(new Font("Arial", Font.BOLD, 16));
+        }
+        if(Ui.isBoardMade()) {
+            textField.setLocation(Util.centeredX(textField, 800, 0), 550);
+        }else{
+            textField.setLocation(Util.centeredX(textField, 800, 0), 630);
+        }
     }
 
     public void actionPerformed(ActionEvent e) {

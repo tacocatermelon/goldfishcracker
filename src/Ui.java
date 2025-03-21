@@ -59,11 +59,24 @@ public class Ui {
                 double tempscore = player.getScored()*Math.pow(10,2); //rounding to 2 decimal places
                 tempscore = Math.round(tempscore);
                 DisplayPanel.setOutputText("Hit!!   +"+tempscore*Math.pow(10,2));
+                frame.getPanel().update();
             }
             enemy.movementTurn();
             player.setMoveCount(0);
             shooting = false;
         }
+    }
+
+    public static int enemyHp(){
+        return enemy.getHp();
+    }
+
+    public static int playerHp(){
+        return player.getHp();
+    }
+
+    public static double playerScore(){
+        return player.getScore();
     }
 
     /*public static void invalidMove(){
