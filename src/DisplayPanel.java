@@ -79,6 +79,10 @@ public class DisplayPanel extends JPanel implements ActionListener, KeyListener{
         DisplayPanel.outputText = outputText;
     }
 
+    public void visibleTextBox(boolean a){
+        textField.setVisible(a);
+    }
+
     public static String promptString(String inputPrompt, DisplayPanel panel) {
         enteredText = "";
         DisplayPanel.inputPrompt = inputPrompt;

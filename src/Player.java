@@ -28,9 +28,9 @@ public class Player extends Tank{
         this.moveCount = moveCount;
     }
 
-    public void setScore(double score) {
+    /*public void setScore(double score) {
         this.score = score;
-    }
+    }*/
 
     public void move(String direction, int dist){
         int[] origPos = new int[]{getxPos(),getyPos()};
@@ -46,7 +46,7 @@ public class Player extends Tank{
 
         int[] posIdxs = Util.toIdx(getPos());
 
-        if(!(posIdxs[1]>=Board.getBoardSize()[1]||posIdxs[0]>=Board.getBoardSize()[0]||posIdxs[0]<0||posIdxs[1]<0)){ //in bounds check
+        if(!(posIdxs[1]>=Board.getBoardSize()[1]||posIdxs[0]>=Board.getBoardSize()[0]||posIdxs[0]<0||posIdxs[1]<0||Arrays.equals(getPos(),Ui.getEnemy().getPos()))){ //in bounds check
             moveCount++;
             Board.newPos(getPos());
             frame.getPanel().repaint();

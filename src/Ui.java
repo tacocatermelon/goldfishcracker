@@ -20,6 +20,10 @@ public class Ui {
         return player;
     }
 
+    public static Enemy getEnemy() {
+        return enemy;
+    }
+
     public static int enemyHp(){
         return enemy.getHp();
     }
@@ -37,22 +41,23 @@ public class Ui {
         player = new Player('✭',5,5,frame);
         enemy = new Enemy('✧',0,0, frame);
 
-        String tempstr = DisplayPanel.promptString("How wide would you like the board to be? (min 8)", frame.getPanel());
+        String tempstr = DisplayPanel.promptString("How wide would you like the board to be? (min 8, max 40)", frame.getPanel());
         int temp = Integer.parseInt(tempstr);
-        while (temp<8){
-            tempstr = DisplayPanel.promptString("Please enter a value >= 8", frame.getPanel());
+        while (temp<8||temp>40){
+            tempstr = DisplayPanel.promptString("Please enter a value between 8 and 40 (inclusive)", frame.getPanel());
             temp = Integer.parseInt(tempstr);
         }
-        String tempstr2 = DisplayPanel.promptString("How tall would you like the board to be? (min 8)", frame.getPanel());
+        String tempstr2 = DisplayPanel.promptString("How tall would you like the board to be? (min 8, max 22)", frame.getPanel());
         int temp2 = Integer.parseInt(tempstr2);
-        while (temp2<8){
-            tempstr2 = DisplayPanel.promptString("Please enter a value >= 8", frame.getPanel());
+        while (temp2<8||temp2>22){
+            tempstr2 = DisplayPanel.promptString("Please enter a value between 8 and 22 (inclusive)", frame.getPanel());
             temp2 = Integer.parseInt(tempstr2);
         }
         Board board = new Board(temp2,temp,player,enemy);
         board.createBoard();
         boardMade = true;
         frame.getPanel().update();
+        frame.getPanel().visibleTextBox(false);
 
         while (player.getHp()>0){
             while (player.getMoveCount()<=3){
@@ -64,6 +69,7 @@ public class Ui {
             }
 
             shooting = true;
+            frame.getPanel().visibleTextBox(true);
             String tempstr3 = DisplayPanel.promptString("What shot power would you like?", frame.getPanel());
             double power = Double.parseDouble(tempstr3);
             String tempstr4 = DisplayPanel.promptString("What shot angle would you like?", frame.getPanel());
@@ -79,7 +85,19 @@ public class Ui {
                 DisplayPanel.setOutputText("Miss!!");
             }
             frame.getPanel().update();
+            System.out.println(1);
 
+            shooting = false;
+            frame.getPanel().visibleTextBox(false);
+            while (player.getMoveCount()<=4){
+                try {
+                    Thread.sleep(100);
+                } catch (InterruptedException e) {
+                    Thread.currentThread().interrupt();
+                }
+            }
+
+            shooting = true;
             enemy.movementTurn();
             player.setMoveCount(0);
 
