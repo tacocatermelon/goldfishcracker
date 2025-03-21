@@ -24,7 +24,7 @@ public class Enemy extends Tank{
         if(posIdxs[1]>=Board.getBoardSize()[1]
                 ||posIdxs[0]>=Board.getBoardSize()[0]
                 ||posIdxs[0]<0||posIdxs[1]<0
-                ||Arrays.equals(getPos(),Ui.getPlayer().getPos())){
+                ||!Board.isEmpty(posIdxs[0],posIdxs[1])){
             setxPos(origPos[0]);
             setyPos(origPos[1]);
         }

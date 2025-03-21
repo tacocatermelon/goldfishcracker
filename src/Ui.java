@@ -39,7 +39,7 @@ public class Ui {
             temp2 = Integer.parseInt(tempstr2);
         }
 
-        Board board = new Board(temp2,temp,player,enemy);
+        Board board = new Board(temp2, temp, player, enemy);
         board.createBoard();
         boardMade = true;
         frame.getPanel().update(); //show board once made

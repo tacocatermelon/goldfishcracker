@@ -5,8 +5,9 @@ public class Board {
     private static Space[][] board;
     private static Player player;
     private static Enemy enemy;
-    static int[] playerPos;
-    static int[] enemyPos;
+    private static int[] playerPos;
+    private static int[] enemyPos;
+    private static Rock[] rocks;
 
     public Board(int xSize, int ySize, Player player, Enemy enemy){
         board = new Space[xSize][ySize];
@@ -52,6 +53,20 @@ public class Board {
         enemy.setPos(enemyPos);
         int[] enemyIdxs = Util.toIdx(enemyPos);
         board[enemyIdxs[0]][enemyIdxs[1]] = enemy; //adding enemy
+
+        rocks = new Rock[5];
+        for (int i = 0; i < rocks.length; i++) {
+            int a = (int)(Math.random()*board.length);
+            int b = (int)(Math.random()*board[0].length);
+            int[] tempPos = Util.toCoords(new int[]{a,b});
+            while(Arrays.equals(tempPos, playerPos)||Arrays.equals(tempPos, enemyPos)){ //block same start pos
+                a = (int)(Math.random()*board.length);
+                b = (int)(Math.random()*board[0].length);
+                tempPos = Util.toCoords(new int[]{a,b});
+            }
+            rocks[i] = new Rock('▩',tempPos[0],tempPos[1]);
+            board[Util.toIdx(tempPos)[0]][Util.toIdx(tempPos)[1]] = rocks[i];
+        }
     }
 
     /*public void printBoard() {
@@ -80,11 +95,7 @@ public class Board {
         playerIdxs = Util.toIdx(playerPos);
         board[playerIdxs[0]][playerIdxs[1]] = player;
 
-        //replace enemy if missing
-        if((!(board[Util.toIdx(enemyPos)[0]][Util.toIdx(enemyPos)[1]] instanceof Enemy))
-                &&(!(board[Util.toIdx(enemyPos)[0]][Util.toIdx(enemyPos)[1]] instanceof Player))){
-            board[Util.toIdx(enemyPos)[0]][Util.toIdx(enemyPos)[1]] = enemy;
-        }
+        replaceAll();
     }
 
     public static void newEnemyPos(int[] newPos){
@@ -94,10 +105,29 @@ public class Board {
         enemyIdxs = Util.toIdx(enemyPos);
         board[enemyIdxs[0]][enemyIdxs[1]] = enemy;
 
-        //replace player if missing
+        replaceAll();
+    }
+
+    public static boolean isEmpty(int xPos, int yPos){
+        return board[xPos][yPos].getSymb()=='_';
+    }
+
+    private static void replaceAll(){
         if((!(board[Util.toIdx(playerPos)[0]][Util.toIdx(playerPos)[1]] instanceof Player))
                 &&(!(board[Util.toIdx(playerPos)[0]][Util.toIdx(playerPos)[1]] instanceof Enemy))){
             board[Util.toIdx(playerPos)[0]][Util.toIdx(playerPos)[1]] = player;
         }
+        if((!(board[Util.toIdx(enemyPos)[0]][Util.toIdx(enemyPos)[1]] instanceof Enemy))
+                &&(!(board[Util.toIdx(enemyPos)[0]][Util.toIdx(enemyPos)[1]] instanceof Player))){
+            board[Util.toIdx(enemyPos)[0]][Util.toIdx(enemyPos)[1]] = enemy;
+        }
+        for (int i = 0; i < rocks.length; i++) {
+            if((!(board[Util.toIdx(rocks[i].getPos())[0]][Util.toIdx(rocks[i].getPos())[1]] instanceof Enemy))
+                    &&(!(board[Util.toIdx(rocks[i].getPos())[0]][Util.toIdx(rocks[i].getPos())[1]] instanceof Player))
+                    &&(!(board[Util.toIdx(rocks[i].getPos())[0]][Util.toIdx(rocks[i].getPos())[1]] instanceof Rock))){
+                board[Util.toIdx(rocks[i].getPos())[0]][Util.toIdx(rocks[i].getPos())[1]] = rocks[i];
+            }
+        }
     }
+
 }
