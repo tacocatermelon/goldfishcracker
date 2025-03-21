@@ -32,23 +32,26 @@ public class Board {
         playerPos = Util.toCoords(new int[]{row,col});
         player.setPos(playerPos);
         int[] playerIdxs = Util.toIdx(playerPos);
-        board[playerIdxs[0]][playerIdxs[1]] = player;
+        board[playerIdxs[0]][playerIdxs[1]] = player; //adding player
+
         for (int i = 0; i < board.length; i++) {
             for (int j = 0; j < board[0].length; j++) {
                 if(board[i][j]==null){
-                    board[i][j] = new Space('_');
+                    board[i][j] = new Space('_'); //filling all spaces
                 }
             }
         }
+
         enemyPos = Util.toCoords(new int[]{row,col});
-        while(Arrays.equals(enemyPos, playerPos)){
+        while(Arrays.equals(enemyPos, playerPos)){ //block same start pos
             row = (int)(Math.random()*board.length);
             col = (int)(Math.random()*board[0].length);
             enemyPos = Util.toCoords(new int[]{row,col});
         }
+
         enemy.setPos(enemyPos);
         int[] enemyIdxs = Util.toIdx(enemyPos);
-        board[enemyIdxs[0]][enemyIdxs[1]] = enemy;
+        board[enemyIdxs[0]][enemyIdxs[1]] = enemy; //adding enemy
     }
 
     /*public void printBoard() {
@@ -76,7 +79,10 @@ public class Board {
         playerPos = newPos;
         playerIdxs = Util.toIdx(playerPos);
         board[playerIdxs[0]][playerIdxs[1]] = player;
-        if((!(board[Util.toIdx(enemyPos)[0]][Util.toIdx(enemyPos)[1]] instanceof Enemy))&&(!(board[Util.toIdx(enemyPos)[0]][Util.toIdx(enemyPos)[1]] instanceof Player))){
+
+        //replace enemy if missing
+        if((!(board[Util.toIdx(enemyPos)[0]][Util.toIdx(enemyPos)[1]] instanceof Enemy))
+                &&(!(board[Util.toIdx(enemyPos)[0]][Util.toIdx(enemyPos)[1]] instanceof Player))){
             board[Util.toIdx(enemyPos)[0]][Util.toIdx(enemyPos)[1]] = enemy;
         }
     }
@@ -87,7 +93,10 @@ public class Board {
         enemyPos = newPos;
         enemyIdxs = Util.toIdx(enemyPos);
         board[enemyIdxs[0]][enemyIdxs[1]] = enemy;
-        if((!(board[Util.toIdx(playerPos)[0]][Util.toIdx(playerPos)[1]] instanceof Player))&&(!(board[Util.toIdx(playerPos)[0]][Util.toIdx(playerPos)[1]] instanceof Enemy))){
+
+        //replace player if missing
+        if((!(board[Util.toIdx(playerPos)[0]][Util.toIdx(playerPos)[1]] instanceof Player))
+                &&(!(board[Util.toIdx(playerPos)[0]][Util.toIdx(playerPos)[1]] instanceof Enemy))){
             board[Util.toIdx(playerPos)[0]][Util.toIdx(playerPos)[1]] = player;
         }
     }

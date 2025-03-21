@@ -1,10 +1,7 @@
-import java.util.Scanner;
-
 public class Ui {
 
     private static Player player;
     private static Enemy enemy;
-    private static Scanner scan = new Scanner(System.in);
     private static boolean boardMade = false;
     private static boolean shooting = false;
 
@@ -12,8 +9,8 @@ public class Ui {
         return boardMade;
     }
 
-    public static boolean isShooting() {
-        return shooting;
+    public static boolean isNotShooting() {
+        return !shooting;
     }
 
     public static Player getPlayer() {
@@ -22,18 +19,6 @@ public class Ui {
 
     public static Enemy getEnemy() {
         return enemy;
-    }
-
-    public static int enemyHp(){
-        return enemy.getHp();
-    }
-
-    public static int playerHp(){
-        return player.getHp();
-    }
-
-    public static double playerScore(){
-        return player.getScore();
     }
 
     public static void play(){
@@ -53,14 +38,15 @@ public class Ui {
             tempstr2 = DisplayPanel.promptString("Please enter a value between 8 and 22 (inclusive)", frame.getPanel());
             temp2 = Integer.parseInt(tempstr2);
         }
+
         Board board = new Board(temp2,temp,player,enemy);
         board.createBoard();
         boardMade = true;
-        frame.getPanel().update();
-        frame.getPanel().visibleTextBox(false);
+        frame.getPanel().update(); //show board once made
+        frame.getPanel().visibleTextBox(false); //hide text box after board made
 
-        while (player.getHp()>0){
-            while (player.getMoveCount()<=3){
+        while (player.getHp()>0&&enemy.getHp()>0){
+            while (player.getMoveCount()<=3){ //wait for player to move 3 times
                 try {
                     Thread.sleep(100);
                 } catch (InterruptedException e) {
@@ -68,28 +54,27 @@ public class Ui {
                 }
             }
 
-            shooting = true;
-            frame.getPanel().visibleTextBox(true);
+            shooting = true; //stop movement
+            frame.getPanel().visibleTextBox(true); //show text box for fire inputs
             String tempstr3 = DisplayPanel.promptString("What shot power would you like?", frame.getPanel());
             double power = Double.parseDouble(tempstr3);
             String tempstr4 = DisplayPanel.promptString("What shot angle would you like?", frame.getPanel());
             double angle = Double.parseDouble(tempstr4);
 
-            if(player.fire(power, angle)){
+            if(player.fire(power, angle)){ //hit
                 enemy.setHp(enemy.getHp()-1);
                 enemy.movementTurn();
                 double tempscore = player.getScored()*Math.pow(10,2); //rounding to 2 decimal places
                 tempscore = Math.round(tempscore);
                 DisplayPanel.setOutputText("Hit!!   +"+tempscore*Math.pow(10,-2));
-            }else{
+            }else{ //miss
                 DisplayPanel.setOutputText("Miss!!");
             }
-            frame.getPanel().update();
-            System.out.println(1);
+            frame.getPanel().update(); //update new positions
 
-            shooting = false;
+            shooting = false; //re-enable movement and hide text box for 1 move
             frame.getPanel().visibleTextBox(false);
-            while (player.getMoveCount()<=4){
+            while (player.getMoveCount()<=4){ //wait for next move
                 try {
                     Thread.sleep(100);
                 } catch (InterruptedException e) {
@@ -97,14 +82,14 @@ public class Ui {
                 }
             }
 
-            shooting = true;
+            shooting = true; //disable movement, let enemy move
             enemy.movementTurn();
-            player.setMoveCount(0);
+            player.setMoveCount(0); //reset move count
 
-            if(enemy.combatTurn()){
+            if(enemy.combatTurn()){ //enemy hit
                 player.setHp(player.getHp()-1);
                 DisplayPanel.setOutputText("Player Hit!!   "+player.getHp()+" Health Left!!");
-            }else{
+            }else{ //enemy miss
                 DisplayPanel.setOutputText("Enemy Missed!!");
             }
             frame.getPanel().update();

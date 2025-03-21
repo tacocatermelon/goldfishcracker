@@ -34,6 +34,7 @@ public class Player extends Tank{
 
     public void move(String direction, int dist){
         int[] origPos = new int[]{getxPos(),getyPos()};
+
         if(direction.equals("w")){
             setyPos(getyPos()+dist);
         }else if(direction.equals("s")){
@@ -44,33 +45,38 @@ public class Player extends Tank{
             setxPos(getxPos()-dist);
         }
 
-        int[] posIdxs = Util.toIdx(getPos());
+        int[] posIdxs = Util.toIdx(getPos()); //transfer to idx for board
 
-        if(!(posIdxs[1]>=Board.getBoardSize()[1]||posIdxs[0]>=Board.getBoardSize()[0]||posIdxs[0]<0||posIdxs[1]<0||Arrays.equals(getPos(),Ui.getEnemy().getPos()))){ //in bounds check
+        if(!(posIdxs[1]>=Board.getBoardSize()[1]
+                ||posIdxs[0]>=Board.getBoardSize()[0]
+                ||posIdxs[0]<0||posIdxs[1]<0
+                ||Arrays.equals(getPos(),Ui.getEnemy().getPos()))){ //in bounds check
             moveCount++;
             Board.newPos(getPos());
             frame.getPanel().repaint();
         }else{
-            setxPos(origPos[0]);
+            setxPos(origPos[0]); //reset pos if invalid move
             setyPos(origPos[1]);
         }
     }
 
     public boolean fire(double power, double angle){
-        scored = 0;
-        angle = Util.toRadians(angle);
+        scored = 0; //scored reset
+        angle = Util.toRadians(angle); //angle converted to radians
+
         double cos = Math.cos(angle);
         double sin = Math.sin(angle);
         double x1 = power*cos+getxPos();
         double y1 = power*sin+getyPos();
-        int[][] shots = new int[(int)power+1][2];
-        double[] xs = new double[(int)power+1];
-        double[] ys = new double[(int)power+1];
-        shots[shots.length-1] = new int[]{(int)Math.round(x1),(int)Math.round(y1)};
-        xs[shots.length-1] = x1;
-        ys[shots.length-1] = y1;
 
-        for (int i = 0; i < shots.length-1; i++) {
+        int[][] shots = new int[(int)power+1][2];
+        double[] xs = new double[(int)power+1]; //storage of all shot x coordinates for score
+        double[] ys = new double[(int)power+1]; //storage of all shot y coordinates for score
+        shots[shots.length-1] = new int[]{(int)Math.round(x1),(int)Math.round(y1)}; //exact shot
+        xs[shots.length-1] = x1; //exact x
+        ys[shots.length-1] = y1; //exact y
+
+        for (int i = 0; i < shots.length-1; i++) { //adding every shot along line for each int value up to power
             x1 = i*cos+getxPos();
             y1 = i*sin+getyPos();
             shots[i] = new int[]{(int)Math.round(x1),(int)Math.round(y1)};
@@ -79,9 +85,9 @@ public class Player extends Tank{
         }
 
         for (int i = 0; i < shots.length; i++) {
-            if(Arrays.equals(shots[i], Board.getEnemyPos())){
-                scored = 100*(Math.sqrt(Math.pow(xs[i]-getxPos(),2)+Math.pow(ys[i]-getyPos(),2))); //distance from tank to point
-                score += scored;
+            if(Arrays.equals(shots[i], Board.getEnemyPos())){ //check all shot positions
+                scored = 100*(Math.sqrt(Math.pow(xs[i]-getxPos(),2)+Math.pow(ys[i]-getyPos(),2))); // 100x distance from tank to point
+                score += scored; //added to total score
                 return true;
             }
         }
