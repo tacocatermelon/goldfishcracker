@@ -36,27 +36,39 @@ public class Enemy extends Tank{
         frame.getPanel().repaint();
     }
 
-    /*public boolean combatTurn(){
-            if() {
+    public boolean combatTurn(){
+        int angle;
+        if(Ui.getPlayer().getxPos()>=getxPos()&&Ui.getPlayer().getyPos()>=getyPos()) {
+            angle = (int)(Math.random()*90);
+        }else if(Ui.getPlayer().getxPos()>=getxPos()&&Ui.getPlayer().getyPos()<getyPos()) {
+            angle = (int)(Math.random()*90)+90;
+        }else if(Ui.getPlayer().getxPos()<getxPos()&&Ui.getPlayer().getyPos()>=getyPos()) {
+            angle = (int)(Math.random()*90)+180;
+        }else {
+            angle = (int)(Math.random()*90)+270;
+        }
 
-            }else if() {
+        int power = (int)(Math.random()*Board.getBoardSize()[0]-1)+2;
 
-            }else if() {
+        double cos = Math.cos(angle);
+        double sin = Math.sin(angle);
+        double x1 = power*cos+getxPos();
+        double y1 = power*sin+getyPos();
 
-            }else {
+        int[][] shots = new int[power+1][2];
+        shots[shots.length-1] = new int[]{(int)Math.round(x1),(int)Math.round(y1)};
 
-            }
-            double cos = Math.cos(angle);
-            double sin = Math.sin(angle);
-            double x1 = power*cos+getxPos();
-            double y1 = power*sin+getyPos();
-            int[] shotPos = new int[]{(int)Math.round(x1),(int)Math.round(y1)};
-            if(Arrays.equals(shotPos, Board.getPlayerPos())){
+        for (int i = 0; i < shots.length-1; i++) {
+            x1 = i*cos+getxPos();
+            y1 = i*sin+getyPos();
+            shots[i] = new int[]{(int)Math.round(x1),(int)Math.round(y1)};
+        }
+
+        for (int i = 0; i < shots.length; i++) {
+            if(Arrays.equals(shots[i], Board.getEnemyPos())){
                 return true;
-            }else{
-                return false;
             }
         }
-    }*/
-
+        return false;
+    }
 }

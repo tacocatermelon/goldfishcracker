@@ -20,6 +20,18 @@ public class Ui {
         return player;
     }
 
+    public static int enemyHp(){
+        return enemy.getHp();
+    }
+
+    public static int playerHp(){
+        return player.getHp();
+    }
+
+    public static double playerScore(){
+        return player.getScore();
+    }
+
     public static void play(){
         Frame frame = new Frame();
         player = new Player('✭',5,5,frame);
@@ -63,25 +75,23 @@ public class Ui {
                 double tempscore = player.getScored()*Math.pow(10,2); //rounding to 2 decimal places
                 tempscore = Math.round(tempscore);
                 DisplayPanel.setOutputText("Hit!!   +"+tempscore*Math.pow(10,-2));
-                frame.getPanel().update();
+            }else{
+                DisplayPanel.setOutputText("Miss!!");
             }
+            frame.getPanel().update();
 
             enemy.movementTurn();
             player.setMoveCount(0);
+
+            if(enemy.combatTurn()){
+                player.setHp(player.getHp()-1);
+                DisplayPanel.setOutputText("Player Hit!!   "+player.getHp()+" Health Left!!");
+            }else{
+                DisplayPanel.setOutputText("Enemy Missed!!");
+            }
+            frame.getPanel().update();
             shooting = false;
         }
-    }
-
-    public static int enemyHp(){
-        return enemy.getHp();
-    }
-
-    public static int playerHp(){
-        return player.getHp();
-    }
-
-    public static double playerScore(){
-        return player.getScore();
     }
 
     /*public static void invalidMove(){
