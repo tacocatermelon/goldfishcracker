@@ -33,14 +33,6 @@ public class Enemy extends Tank{
     }
 
     public boolean combatTurn(){
-        if(Ui.getPlayer().getxPos()==getxPos()||Ui.getPlayer().getyPos()==getyPos()){
-            return true; //auto hit if same x or same y
-        }
-
-        if(Math.sqrt(Math.pow(Ui.getPlayer().getxPos()-getxPos(),2) +Math.pow(Ui.getPlayer().getyPos()-getyPos(),2))<=3){
-            return true; //auto hit if distance is 3 or less
-        }
-
         int angle;
         if(Ui.getPlayer().getxPos()>=getxPos()&&Ui.getPlayer().getyPos()>=getyPos()) {
             angle = (int)(Math.random()*90); //pos x and pos y
@@ -66,6 +58,18 @@ public class Enemy extends Tank{
             x1 = i*cos+getxPos();
             y1 = i*sin+getyPos();
             shots[i] = new int[]{(int)Math.round(x1),(int)Math.round(y1)}; //shots along line for every int value up to power
+        }
+
+        if(Util.hasRock(shots)){ //check if rock in shot path
+            return false;
+        }
+
+        if(Ui.getPlayer().getxPos()==getxPos()||Ui.getPlayer().getyPos()==getyPos()){
+            return true; //auto hit if same x or same y
+        }
+
+        if(Math.sqrt(Math.pow(Ui.getPlayer().getxPos()-getxPos(),2) +Math.pow(Ui.getPlayer().getyPos()-getyPos(),2))<=3){
+            return true; //auto hit if distance is 3 or less
         }
 
         for (int i = 0; i < shots.length; i++) {

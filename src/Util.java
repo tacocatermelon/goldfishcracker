@@ -1,5 +1,6 @@
 import javax.swing.*;
 import java.awt.*;
+import java.util.Arrays;
 
 public class Util {
 
@@ -31,6 +32,17 @@ public class Util {
 
     public static double toRadians(double degrees){
         return (Math.PI/180)*degrees;
+    }
+
+    public static boolean hasRock(int[][] shots){
+        for (int i = 0; i < shots.length; i++) {
+            for (int j = 0; j < Board.getRocks().length; j++) {
+                if(Arrays.equals(shots[i],Board.getRocks()[j].getPos())){
+                    return true;
+                }
+            }
+        }
+        return false;
     }
 
 }

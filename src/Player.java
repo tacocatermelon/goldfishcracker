@@ -84,6 +84,10 @@ public class Player extends Tank{
             ys[i] = y1;
         }
 
+        if(Util.hasRock(shots)){ //check if rock in shot path
+            return false;
+        }
+
         for (int i = 0; i < shots.length; i++) {
             if(Arrays.equals(shots[i], Board.getEnemyPos())){ //check all shot positions
                 scored = 100*(Math.sqrt(Math.pow(xs[i]-getxPos(),2)+Math.pow(ys[i]-getyPos(),2))); // 100x distance from tank to point

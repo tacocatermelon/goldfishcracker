@@ -27,6 +27,10 @@ public class Board {
         return enemyPos;
     }
 
+    public static Rock[] getRocks() {
+        return rocks;
+    }
+
     public void createBoard(){
         int row = (int)(Math.random()*board.length);
         int col = (int)(Math.random()*board[0].length);
