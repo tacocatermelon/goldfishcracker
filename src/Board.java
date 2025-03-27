@@ -58,7 +58,12 @@ public class Board {
         int[] enemyIdxs = Util.toIdx(enemyPos);
         board[enemyIdxs[0]][enemyIdxs[1]] = enemy; //adding enemy
 
-        rocks = new Rock[5];
+        int boardArea = board.length*board[0].length;
+        if(boardArea/(880/12)<1){
+            rocks = new Rock[1]; //always at least 1 rock
+        }else {
+            rocks = new Rock[boardArea / (880 / 12)]; //rock creation
+        }
         for (int i = 0; i < rocks.length; i++) {
             int a = (int)(Math.random()*board.length);
             int b = (int)(Math.random()*board[0].length);
@@ -68,7 +73,7 @@ public class Board {
                 b = (int)(Math.random()*board[0].length);
                 tempPos = Util.toCoords(new int[]{a,b});
             }
-            rocks[i] = new Rock('▩',tempPos[0],tempPos[1]);
+            rocks[i] = new Rock('▩',tempPos[0],tempPos[1]); //adding rocks
             board[Util.toIdx(tempPos)[0]][Util.toIdx(tempPos)[1]] = rocks[i];
         }
     }
