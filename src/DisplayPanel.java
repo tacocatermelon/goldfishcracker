@@ -16,10 +16,12 @@ public class DisplayPanel extends JPanel implements ActionListener, KeyListener{
     private final JButton a;
     private final JButton s;
     private final JButton d;
+    private final JButton end;
     private final JTextField textField;
     private static String inputPrompt = "";
     private static String enteredText = "";
     private static String outputText = "";
+    private static String[] gameEndText = new String[2];
 
     public DisplayPanel() {
         setBackground(new Color(149,185,219));
@@ -28,16 +30,19 @@ public class DisplayPanel extends JPanel implements ActionListener, KeyListener{
         a = new JButton("A");
         s = new JButton("S");
         d = new JButton("D");
+        end = new JButton("Play Again?");
 
         w.addActionListener(this);
         a.addActionListener(this);
         s.addActionListener(this);
         d.addActionListener(this);
+        end.addActionListener(this);
 
         add(w);
         add(a);
         add(s);
         add(d);
+        add(end);
 
         addKeyListener(this);
         setFocusable(true);
@@ -67,13 +72,9 @@ public class DisplayPanel extends JPanel implements ActionListener, KeyListener{
         add(textField);
     }
 
-    /*public static String getInputPrompt() {
-        return inputPrompt;
+    public static void setGameEndText(String[] gameEndText) {
+        DisplayPanel.gameEndText = gameEndText;
     }
-
-    public static String getOutputText() {
-        return outputText;
-    }*/
 
     public static void setOutputText(String outputText) {
         DisplayPanel.outputText = outputText;
@@ -100,60 +101,79 @@ public class DisplayPanel extends JPanel implements ActionListener, KeyListener{
 
     @Override
     public void paintComponent(Graphics g) {
-        super.paintComponent(g);
-        g.setFont(new Font("Arial", Font.BOLD, 16));
-        g.setColor(Color.RED);
-        for (JButton jButton : Arrays.asList(w, a, s, d)) {
-            jButton.setVisible(Ui.isBoardMade()); //buttons hidden until board made
-        }
-
-        if(Ui.isBoardMade()) {
-            String[] board = Board.boardToStrings();
-            int newLine = g.getFont().getSize() + 5;
-            g.setFont(new Font("Arial", Font.BOLD, 20));
-            g.setColor(new Color(88, 40, 103));
-            for (int i = 0; i < board.length; i++) { //board drawing
-                Util.drawCentered(g,board[i].substring(4),800,0,50+(newLine*i));
+        if(!Ui.isGameOver()) {
+            super.paintComponent(g);
+            g.setFont(new Font("Arial", Font.BOLD, 16));
+            g.setColor(Color.RED);
+            for (JButton jButton : Arrays.asList(w, a, s, d)) {
+                jButton.setVisible(Ui.isBoardMade()); //buttons hidden until board made
             }
 
-            g.setFont(new Font("Arial", Font.BOLD, 16));
-            g.setColor(Color.BLUE);
-        }
+            if (Ui.isBoardMade()) {
+                String[] board = Board.boardToStrings();
+                int newLine = g.getFont().getSize() + 5;
+                g.setFont(new Font("Arial", Font.BOLD, 20));
+                g.setColor(new Color(88, 40, 103));
+                for (int i = 0; i < board.length; i++) { //board drawing
+                    Util.drawCentered(g, board[i].substring(4), 800, 0, 50 + (newLine * i));
+                }
 
-        //buttons
-        w.setLocation(Util.centeredX(w,800,0), 575);
-        a.setLocation(Util.centeredX(w,800,0)-50, 600);
-        s.setLocation(Util.centeredX(w,800,0), 625);
-        d.setLocation(Util.centeredX(w,800,0)+50, 600);
+                g.setFont(new Font("Arial", Font.BOLD, 16));
+                g.setColor(Color.BLUE);
+            }
 
-        if(Ui.isBoardMade()){
-            Util.drawCentered(g,inputPrompt,800,0,545); //prompt at top
+            //buttons
+            w.setLocation(Util.centeredX(w, 800, 0), 575);
+            a.setLocation(Util.centeredX(w, 800, 0) - 50, 600);
+            s.setLocation(Util.centeredX(w, 800, 0), 625);
+            d.setLocation(Util.centeredX(w, 800, 0) + 50, 600);
+
+            if (Ui.isBoardMade()) {
+                Util.drawCentered(g, inputPrompt, 800, 0, 545); //prompt at top
+            } else {
+                Util.drawCentered(g, inputPrompt, 800, 0, 625); //prompt at bottom
+            }
+
+            if (!inputPrompt.isEmpty()) {
+                outputText = "";
+            }
+
+            if (Ui.isBoardMade()) {
+                g.setColor(new Color(9, 161, 15));
+                Util.drawCentered(g, outputText, 800, 0, 525);
+
+                g.setColor(new Color(129, 31, 31));
+                g.setFont(new Font("Arial", Font.BOLD, 22));
+                Util.drawCentered(g, "Enemy Health: " + Ui.getEnemy().getHp(), 300, 0, 600);
+                g.setColor(new Color(37, 66, 129));
+                Util.drawCentered(g, "Player Health: " + Ui.getPlayer().getHp(), 300, 0, 625);
+                g.setColor(new Color(8, 161, 14));
+                Util.drawCentered(g, "Score: " + Ui.getPlayer().getScore(), 300, 500, 615);
+                g.setFont(new Font("Arial", Font.BOLD, 16));
+            }
+
+            if (Ui.isBoardMade()) {
+                textField.setLocation(Util.centeredX(textField, 800, 0), 550); //textbox at top
+            } else {
+                textField.setLocation(Util.centeredX(textField, 800, 0), 630); //textbox at bottom
+            }
+            end.setVisible(false);
         }else{
-            Util.drawCentered(g,inputPrompt,800,0,625); //prompt at bottom
-        }
-
-        if(!inputPrompt.isEmpty()){
-            outputText = "";
-        }
-
-        if(Ui.isBoardMade()) {
-            g.setColor(new Color(9, 161, 15));
-            Util.drawCentered(g, outputText, 800, 0, 525);
-
-            g.setColor(new Color(129, 31, 31));
-            g.setFont(new Font("Arial", Font.BOLD, 22));
-            Util.drawCentered(g, "Enemy Health: " + Ui.getEnemy().getHp(), 300, 0, 600);
-            g.setColor(new Color(37, 66, 129));
-            Util.drawCentered(g, "Player Health: " + Ui.getPlayer().getHp(), 300, 0, 625);
-            g.setColor(new Color(8, 161, 14));
-            Util.drawCentered(g,"Score: " + Ui.getPlayer().getScore(),300,500,615);
-            g.setFont(new Font("Arial", Font.BOLD, 16));
-        }
-
-        if(Ui.isBoardMade()) {
-            textField.setLocation(Util.centeredX(textField, 800, 0), 550); //textbox at top
-        }else{
-            textField.setLocation(Util.centeredX(textField, 800, 0), 630); //textbox at bottom
+            end.setSize(150, 50);
+            end.setFont(new Font("Arial", Font.BOLD, 22));
+            end.setLocation(Util.centeredX(end, 800, 0), Util.centeredY(end, 700, 0));
+            end.setVisible(true);
+            for (JButton jButton : Arrays.asList(w, a, s, d)) {
+                jButton.setVisible(false);
+            }
+            g.setFont(new Font("Arial", Font.BOLD, 25));
+            if(gameEndText[0].equals("You win!!! Your score was:")){
+                g.setColor(new Color(51, 177, 110));
+            }else{
+                g.setColor(new Color(218, 59, 59));
+            }
+            Util.drawCentered(g,gameEndText[0],800,0,400);
+            Util.drawCentered(g,gameEndText[1],800,0,435);
         }
     }
 
@@ -170,6 +190,9 @@ public class DisplayPanel extends JPanel implements ActionListener, KeyListener{
                     Ui.getPlayer().move("d",1);
                 }
                 refocus();
+            }
+            if(casted == end){
+                Ui.setGameOver(false);
             }
         }
     }

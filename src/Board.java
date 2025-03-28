@@ -78,15 +78,6 @@ public class Board {
         }
     }
 
-    /*public void printBoard() {
-        for (int i = 0; i < board.length; i++) {
-            for (int j = 0; j < board[0].length; j++) {
-                System.out.print(board[i][j].getSymb());
-            }
-            System.out.println();
-        }
-    }*/
-
     public static String[] boardToStrings(){
         String[] out = new String[board.length];
         for (int i = 0; i < board.length; i++) {

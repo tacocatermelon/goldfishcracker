@@ -30,6 +30,11 @@ public class Util {
         return (width/2 - size/2)+xPos;
     }
 
+    public static int centeredY(JButton a, int height, int yPos){
+        int size = a.getHeight();
+        return (height/2 - size/2)+yPos;
+    }
+
     public static double toRadians(double degrees){
         return (Math.PI/180)*degrees;
     }
@@ -44,5 +49,4 @@ public class Util {
         }
         return false;
     }
-
 }

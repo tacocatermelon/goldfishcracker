@@ -1,9 +1,12 @@
 public class Ui {
 
-    private static Player player;
-    private static Enemy enemy;
+    private static final Frame frame = new Frame();
+    private static final Player player = new Player('✭',5,5,frame);
+    private static final Enemy enemy = new Enemy('✧',0,0, frame);
     private static boolean boardMade = false;
     private static boolean shooting = false;
+    private static boolean gameOver = false;
+    private static Board board;
 
     public static boolean isBoardMade() {
         return boardMade;
@@ -21,27 +24,43 @@ public class Ui {
         return enemy;
     }
 
+    public static boolean isGameOver() {
+        return gameOver;
+    }
+
+    public static void setGameOver(boolean gameOver) {
+        Ui.gameOver = gameOver;
+    }
+
+    public static void setBoardMade(boolean boardMade) {
+        Ui.boardMade = boardMade;
+    }
+
     public static void play(){
-        Frame frame = new Frame();
-        player = new Player('✭',5,5,frame);
-        enemy = new Enemy('✧',0,0, frame);
+        shooting = false;
+        gameOver = false;
+        boardMade = false;
+        player.setHp(5);
+        enemy.setHp(5);
+        player.setMoveCount(0);
+        frame.getPanel().visibleTextBox(true); //hide text box after board made
 
         String tempstr = DisplayPanel.promptString("How wide would you like the board to be? (min 10, max 40)", frame.getPanel());
         int temp = Integer.parseInt(tempstr);
-        while (temp<10||temp>40){
+        while (temp < 10 || temp > 40) {
             tempstr = DisplayPanel.promptString("Please enter a value between 10 and 40 (inclusive)", frame.getPanel());
             temp = Integer.parseInt(tempstr);
         }
         String tempstr2 = DisplayPanel.promptString("How tall would you like the board to be? (min 10, max 22)", frame.getPanel());
         int temp2 = Integer.parseInt(tempstr2);
-        while (temp2<10||temp2>22){
+        while (temp2 < 10 || temp2 > 22) {
             tempstr2 = DisplayPanel.promptString("Please enter a value between 10 and 22 (inclusive)", frame.getPanel());
             temp2 = Integer.parseInt(tempstr2);
         }
 
-        Board board = new Board(temp2, temp, player, enemy);
-        board.createBoard();
+        board = new Board(temp2, temp, player, enemy);
         boardMade = true;
+        board.createBoard();
         frame.getPanel().update(); //show board once made
         frame.getPanel().visibleTextBox(false); //hide text box after board made
 
@@ -94,23 +113,24 @@ public class Ui {
             }
             frame.getPanel().update();
             shooting = false;
+            player.setHp(0);
         }
+        if(player.getHp()<1){
+            DisplayPanel.setGameEndText(new String[]{"You lose!!! Your score was:", String.valueOf(player.getScore())});
+        }else{
+            DisplayPanel.setGameEndText(new String[]{"You win!!! Your score was:", String.valueOf(player.getScore())});
+        }
+        shooting = true;
+        gameOver = true;
+        boardMade = false;
+        frame.getPanel().update();
+        while (gameOver){
+            try {
+                Thread.sleep(100);
+            } catch (InterruptedException e) {
+                Thread.currentThread().interrupt();
+            }
+        }
+        play();
     }
-
-    /*public static void invalidMove(){
-        scan.nextLine();
-        System.out.print("Enter a direction (WASD): ");
-        String choice = scan.nextLine().toLowerCase();
-        while(!(choice.equals("w")||choice.equals("a")||choice.equals("s")||choice.equals("d"))){
-            System.out.print("Please enter a valid direction (WASD): ");
-            choice = scan.nextLine().toLowerCase();
-        }
-        System.out.print("How much would you like to move? (up to "+ Board.getBoardSize()[1]/6+") ");
-        int move = scan.nextInt();
-        while(move<1||move>Board.getBoardSize()[0]/6){
-            System.out.print("Please enter a valid number: ");
-            move = scan.nextInt();
-        }
-        player.move(choice,move);
-    }*/
 }
