@@ -49,4 +49,38 @@ public class Util {
         }
         return false;
     }
+
+    public static double[] calculateArc(double power, double angle, double t){
+        angle = toRadians(angle);
+        double Vx = power*Math.cos(angle);
+        double vi = power*Math.sin(angle);
+
+        double a = -9.81;
+
+        return new double[]{ (Vx*t), ((vi*t)+((a*Math.pow(t,2))/2))};
+    }
+
+    public static double maxTime(double power, double angle, int yDist){
+        angle = toRadians(angle);
+        double vi = power*Math.sin(angle);
+        double a = -9.81;
+
+        double[] times = new double[]{(-vi + Math.sqrt(Math.pow(vi,2)-2*a* (double) yDist))/a,(-vi - Math.sqrt(Math.pow(vi,2)-2*a* (double) yDist))/a};
+        if(times[0]<0){
+            return times[1];
+        }else{
+            return times[0];
+        }
+    }
+
+    public static boolean hitsPoint(double checkX, double checkY, double power, double angle, int yPos){
+        angle = toRadians(angle);
+
+        double vx = power*Math.cos(angle);
+        double vi = power*Math.sin(angle);
+        double t = checkX/vx;
+
+        return Math.abs(checkY - ((vi*t)+((-9.81*Math.pow(t,2))/2)+yPos)) <= 1;
+    }
+
 }
