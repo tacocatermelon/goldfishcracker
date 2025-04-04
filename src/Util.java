@@ -94,7 +94,6 @@ public class Util {
         }
 
         double y = ((Math.tan(angle))*checkX)-((9.81*Math.pow(checkX,2))/(2*Math.pow(power*Math.cos(angle),2)))+yPos;
-        System.out.println(y);
         return (Math.abs(checkY - y) <= 1);
     }
 }

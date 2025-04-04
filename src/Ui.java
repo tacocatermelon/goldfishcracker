@@ -17,6 +17,10 @@ public class Ui {
         return !shooting;
     }
 
+    public static boolean isHardMode() {
+        return hardMode;
+    }
+
     public static Player getPlayer() {
         return player;
     }
@@ -67,8 +71,15 @@ public class Ui {
         frame.getPanel().visibleTextBox(false); //hide text box after board made
 
         while (player.getHp()>0&&enemy.getHp()>0){
+            int moves = player.getMoveCount();
             while (player.getMoveCount()<=3){ //wait for player to move 3 times
                 try {
+                    if(player.getMoveCount()>moves){
+                        moves = player.getMoveCount();
+                        if(hardMode){
+                            enemy.movementTurn();
+                        }
+                    }
                     Thread.sleep(100);
                 } catch (InterruptedException e) {
                     Thread.currentThread().interrupt();

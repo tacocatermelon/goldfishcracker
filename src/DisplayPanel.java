@@ -144,12 +144,21 @@ public class DisplayPanel extends JPanel implements ActionListener, KeyListener{
 
                 g.setColor(new Color(129, 31, 31));
                 g.setFont(new Font("Arial", Font.BOLD, 22));
-                Util.drawCentered(g, "Enemy Health: " + Ui.getEnemy().getHp(), 300, 0, 600);
+                Util.drawCentered(g, "Enemy Health: " + Ui.getEnemy().getHp(), 300, 0, 550);
+                Util.drawCentered(g, "Enemy Position: (" + Ui.getEnemy().getxPos() + ", " + Ui.getEnemy().getyPos() + ")", 300, 0, 570);
                 g.setColor(new Color(37, 66, 129));
-                Util.drawCentered(g, "Player Health: " + Ui.getPlayer().getHp(), 300, 0, 625);
+                Util.drawCentered(g, "Player Health: " + Ui.getPlayer().getHp(), 300, 0, 600);
+                Util.drawCentered(g, "Player Position: (" + Ui.getPlayer().getxPos() + ", " + Ui.getPlayer().getyPos() + ")", 300, 0, 620);
                 g.setColor(new Color(8, 161, 14));
                 Util.drawCentered(g, "Score: " + Ui.getPlayer().getScore(), 300, 500, 615);
                 g.setFont(new Font("Arial", Font.BOLD, 16));
+                if(Ui.isHardMode()){
+                    g.setColor(new Color(202, 5, 5));
+                    Util.drawCentered(g, "Hard Mode", 800, 0, 30);
+                }else{
+                    g.setColor(new Color(44, 168, 16));
+                    Util.drawCentered(g, "Easy Mode", 800, 0, 30);
+                }
             }
 
             if (Ui.isBoardMade()) {
