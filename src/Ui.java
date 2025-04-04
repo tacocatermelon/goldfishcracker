@@ -6,6 +6,7 @@ public class Ui {
     private static boolean boardMade = false;
     private static boolean shooting = false;
     private static boolean gameOver = false;
+    private static boolean hardMode = false;
     private static Board board;
 
     public static boolean isBoardMade() {
@@ -32,10 +33,6 @@ public class Ui {
         Ui.gameOver = gameOver;
     }
 
-    public static void setBoardMade(boolean boardMade) {
-        Ui.boardMade = boardMade;
-    }
-
     public static void play(){
         shooting = false;
         gameOver = false;
@@ -56,6 +53,11 @@ public class Ui {
         while (temp2 < 10 || temp2 > 22) {
             tempstr2 = DisplayPanel.promptString("Please enter a value between 10 and 22 (inclusive)", frame.getPanel());
             temp2 = Integer.parseInt(tempstr2);
+        }
+
+        String hardPrompt = DisplayPanel.promptString("Hard mode? (y/n)", frame.getPanel());
+        if(hardPrompt.toLowerCase().equals("y")){
+            hardMode = true;
         }
 
         board = new Board(temp2, temp, player, enemy);
@@ -79,8 +81,14 @@ public class Ui {
             double power = Double.parseDouble(tempstr3);
             String tempstr4 = DisplayPanel.promptString("What shot angle would you like?", frame.getPanel());
             double angle = Double.parseDouble(tempstr4);
+            boolean hit;
+            if(hardMode){
+                hit = player.arcShot(power,angle);
+            }else{
+                hit = player.fire(power, angle);//hit
+            }
 
-            if(player.fire(power, angle)){ //hit
+            if(hit){
                 enemy.setHp(enemy.getHp()-1);
                 enemy.movementTurn();
                 double tempscore = player.getScored()*Math.pow(10,2); //rounding to 2 decimal places
@@ -113,7 +121,6 @@ public class Ui {
             }
             frame.getPanel().update();
             shooting = false;
-            player.setHp(0);
         }
         if(player.getHp()<1){
             DisplayPanel.setGameEndText(new String[]{"You lose!!! Your score was:", String.valueOf(player.getScore())});

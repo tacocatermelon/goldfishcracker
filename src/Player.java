@@ -97,4 +97,23 @@ public class Player extends Tank{
         }
         return false;
     }
+
+    public boolean arcShot(double power, double angle){
+        double checkX = Ui.getEnemy().getxPos();
+        double checkY = Ui.getEnemy().getyPos();
+
+        for (int i = 0; i < Board.getRocks().length; i++) {
+            if(Util.hitsPoint(Board.getRocks()[i].getxPos(),Board.getRocks()[i].getyPos(),power,angle,getxPos(),getyPos())){
+                return false;
+            }
+        }
+
+        if(Util.hitsPoint(checkX,checkY,power,angle,getxPos(),getyPos())){
+            scored = 100*(Math.sqrt(Math.pow(Ui.getEnemy().getxPos()-getxPos(),2)+Math.pow(Ui.getEnemy().getyPos()-getyPos(),2))); // 100x distance from tank to point
+            score += scored; //added to total score
+            return true;
+        }else{
+            return false;
+        }
+    }
 }

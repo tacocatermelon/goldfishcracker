@@ -39,6 +39,10 @@ public class Util {
         return (Math.PI/180)*degrees;
     }
 
+    public static double toDegrees(double radians){
+        return (180/Math.PI)*radians;
+    }
+
     public static boolean hasRock(int[][] shots){
         for (int i = 0; i < shots.length; i++) {
             for (int j = 0; j < Board.getRocks().length; j++) {
@@ -50,37 +54,47 @@ public class Util {
         return false;
     }
 
-    public static double[] calculateArc(double power, double angle, double t){
+    public static double[] calculateArc(double power, double angle, int yPos, double t){
         angle = toRadians(angle);
-        double Vx = power*Math.cos(angle);
+
+        double vx = power*Math.cos(angle)/2;
         double vi = power*Math.sin(angle);
 
-        double a = -9.81;
+        double xdist = vx*t;
+        double ydist = yPos + (vi*t) - (0.5*9.81*Math.pow(t,2));
 
-        return new double[]{ (Vx*t), ((vi*t)+((a*Math.pow(t,2))/2))};
+        return new double[]{xdist,ydist};
     }
 
-    public static double maxTime(double power, double angle, int yDist){
+    public static double getTime(double power, double angle){
         angle = toRadians(angle);
         double vi = power*Math.sin(angle);
-        double a = -9.81;
 
-        double[] times = new double[]{(-vi + Math.sqrt(Math.pow(vi,2)-2*a* (double) yDist))/a,(-vi - Math.sqrt(Math.pow(vi,2)-2*a* (double) yDist))/a};
-        if(times[0]<0){
-            return times[1];
-        }else{
-            return times[0];
+        return (vi*Math.sin(angle))/9.81;
+    }
+
+    public static boolean hitsPoint(double checkX, double checkY, double power, double angle, int xPos, int yPos){
+        angle = toRadians(angle);
+        checkX -= xPos;
+
+        double t = getTime(power,angle);
+        double xdist = xPos+calculateArc(power, angle, yPos, t)[0];
+        double ydist = yPos+calculateArc(power, angle, yPos, t)[1];
+
+        if((Math.abs(checkY - ydist) <= 1)&&(Math.abs(checkX - xdist) <= 1)){
+            return true;
         }
+
+        if(Util.toDegrees(angle)==90&&xPos==checkX){
+            return (yPos+(Math.pow(power,2)*Math.pow(Math.sin(angle),2))/(2*9.81))>=checkY;
+        }
+
+        if(Util.toDegrees(angle)==270&&xPos==checkX){
+            return true;
+        }
+
+        double y = ((Math.tan(angle))*checkX)-((9.81*Math.pow(checkX,2))/(2*Math.pow(power*Math.cos(angle),2)))+yPos;
+        System.out.println(y);
+        return (Math.abs(checkY - y) <= 1);
     }
-
-    public static boolean hitsPoint(double checkX, double checkY, double power, double angle, int yPos){
-        angle = toRadians(angle);
-
-        double vx = power*Math.cos(angle);
-        double vi = power*Math.sin(angle);
-        double t = checkX/vx;
-
-        return Math.abs(checkY - ((vi*t)+((-9.81*Math.pow(t,2))/2)+yPos)) <= 1;
-    }
-
 }
