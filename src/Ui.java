@@ -46,20 +46,60 @@ public class Ui {
         player.setMoveCount(0);
         frame.getPanel().visibleTextBox(true); //hide text box after board made
 
-        String tempstr = DisplayPanel.promptString("How wide would you like the board to be? (min 10, max 40)", frame.getPanel());
-        int temp = Integer.parseInt(tempstr);
+        String tempstr = DisplayPanel.promptString("How wide would you like the board to be? (min 10, max 40)", frame.getPanel());;
+        boolean correct = false;
+        int temp = 0;
+        while (!correct){ //catch strings inputted for numbers
+            try{
+                temp = Integer.parseInt(tempstr);
+                correct = true;
+            } catch (NumberFormatException e) {
+                tempstr = DisplayPanel.promptString("Please enter a value between 10 and 40 (inclusive)", frame.getPanel());
+            }
+        }
         while (temp < 10 || temp > 40) {
             tempstr = DisplayPanel.promptString("Please enter a value between 10 and 40 (inclusive)", frame.getPanel());
-            temp = Integer.parseInt(tempstr);
+            correct = false;
+            temp = 0;
+            while (!correct){ //catch strings inputted for numbers
+                try{
+                    temp = Integer.parseInt(tempstr);
+                    correct = true;
+                } catch (NumberFormatException e) {
+                    tempstr = DisplayPanel.promptString("Please enter a value between 10 and 40 (inclusive)", frame.getPanel());
+                }
+            }
         }
+
         String tempstr2 = DisplayPanel.promptString("How tall would you like the board to be? (min 10, max 22)", frame.getPanel());
-        int temp2 = Integer.parseInt(tempstr2);
+        correct = false;
+        int temp2 = 0;
+        while (!correct){ //catch strings inputted for numbers
+            try{
+                temp2 = Integer.parseInt(tempstr2);
+                correct = true;
+            } catch (NumberFormatException e) {
+                tempstr2 = DisplayPanel.promptString("Please enter a value between 10 and 22 (inclusive)", frame.getPanel());
+            }
+        }
         while (temp2 < 10 || temp2 > 22) {
             tempstr2 = DisplayPanel.promptString("Please enter a value between 10 and 22 (inclusive)", frame.getPanel());
-            temp2 = Integer.parseInt(tempstr2);
+            correct = false;
+            temp2 = 0;
+            while (!correct){ //catch strings inputted for numbers
+                try{
+                    temp2 = Integer.parseInt(tempstr2);
+                    correct = true;
+                } catch (NumberFormatException e) {
+                    tempstr2 = DisplayPanel.promptString("Please enter a value between 10 and 40 (inclusive)", frame.getPanel());
+                }
+            }
         }
 
         String hardPrompt = DisplayPanel.promptString("Hard mode? (y/n)", frame.getPanel());
+        while (!(hardPrompt.equalsIgnoreCase("y"))&&!(hardPrompt.equalsIgnoreCase("n"))){
+            hardPrompt = DisplayPanel.promptString("Please input either y or n", frame.getPanel());
+        }
         if(hardPrompt.toLowerCase().equals("y")){
             hardMode = true;
         }
@@ -88,10 +128,31 @@ public class Ui {
 
             shooting = true; //stop movement
             frame.getPanel().visibleTextBox(true); //show text box for fire inputs
+
             String tempstr3 = DisplayPanel.promptString("What shot power would you like?", frame.getPanel());
-            double power = Double.parseDouble(tempstr3);
+            double power = 0;
+            correct = false;
+            while (!correct){ //catch strings inputted for numbers
+                try {
+                    power = Double.parseDouble(tempstr3);
+                    correct = true;
+                } catch (NumberFormatException e) {
+                    tempstr3 = DisplayPanel.promptString("What shot power would you like?", frame.getPanel());
+                }
+            }
+
             String tempstr4 = DisplayPanel.promptString("What shot angle would you like?", frame.getPanel());
-            double angle = Double.parseDouble(tempstr4);
+            double angle = 0;
+            correct = false;
+            while (!correct){ //catch strings inputted for numbers
+                try {
+                    angle = Double.parseDouble(tempstr4);
+                    correct = true;
+                } catch (NumberFormatException e) {
+                    tempstr4 = DisplayPanel.promptString("What shot angle would you like?", frame.getPanel());
+                }
+            }
+
             boolean hit;
             if(hardMode){
                 hit = player.arcShot(power,angle);
